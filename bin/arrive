@@ -1,0 +1,30 @@
+#!/bin/bash
+
+LOC_DIR=/usr/local/etc/location.d
+LOC_LINK=.location
+LOC_LAST=$LOC_LINK.last
+
+if [ -n "$1" ]
+then
+	LOC=$1
+else
+	LOC="auto"
+fi
+
+cd $HOME
+rm $LOC_LAST && mv $LOC_LINK $LOC_LAST || {
+	echo "Failed to backup current location"
+	exit
+}
+
+LOC_PATH=$LOC_DIR/$LOC
+[ -d "$LOC_PATH" ] || {
+	echo "Invalid location: $LOC"
+	mv $LOC_LAST $LOC_LINK	# recover last location
+	exit
+}
+ln -s $LOC_PATH $LOC_LINK
+
+echo "Welcome to $LOC"
+
+exit
