@@ -1,15 +1,11 @@
 #!/bin/bash
 
 LOC_DIR=/usr/local/etc/location.d
-LOC_LINK=.location
+LOC_LINK=~/.location
 LOC_LAST=$LOC_LINK.last
+LOC_RC=$LOC_LINK/rc
 
-if [ -n "$1" ]
-then
-	LOC=$1
-else
-	LOC="auto"
-fi
+[ -n "$1" ] && LOC=$1 || LOC="auto"
 
 cd $HOME
 rm $LOC_LAST && mv $LOC_LINK $LOC_LAST || {
@@ -24,6 +20,8 @@ LOC_PATH=$LOC_DIR/$LOC
 	exit
 }
 ln -s $LOC_PATH $LOC_LINK
+
+[ -x $LOC_RC ] && source $LOC_RC
 
 echo "Welcome to $LOC"
 
